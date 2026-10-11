@@ -2,6 +2,7 @@ import validation
 import team
 import player
 import knowledge_base
+import evaluator
 while True:
     inp1=input("enter team formation(format:defenders–midfielders–forwards):")
     inp1=inp1.strip()
@@ -81,4 +82,18 @@ for i in key_players_attribute:
     for j in i.weaknesses:
         player_fact={"subject":i.jersey_no,"type":"weakness","value":j}
         kb.add_fact(player_fact)
-print(kb.facts)
+rule_evaluator = evaluator.RuleEvaluator(kb)
+team_fact={"subject": "our_team",
+"type": "weakness",
+"value": "weak_against_high_press"}
+kb.add_fact(team_fact)
+conditions = [{"subject": "our_team",
+"type": "weakness",
+"value": "weak_against_high_press"},]
+conclusion = "high_press_vulnerability"
+reason = "Our team has a recorded weakness against high pressing."
+severity = "high"
+print(kb.add_rule(conditions,conclusion,reason,severity))
+rule_evaluator.evaluate_rules()
+print(kb.results)
+print("Number of stored rules:", len(kb.rules))
