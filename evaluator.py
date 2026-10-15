@@ -3,6 +3,7 @@ class RuleEvaluator:
     def __init__(self,kb):
         self.kb=kb
     def evaluate_rules(self):
+        self.kb.results.clear()
         for i in self.kb.rules:
             rule_counter=0
             for j in i["conditions"]:
@@ -12,9 +13,3 @@ class RuleEvaluator:
                         break
             if len(i["conditions"])== rule_counter and len(i["conditions"])!=0:
                 self.kb.results[i["id"]]={"conclusion":i["conclusion"],"reason":i["reason"],"severity":i["severity"]}
-
-
-
-
-
-
