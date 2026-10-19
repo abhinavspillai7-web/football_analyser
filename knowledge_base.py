@@ -14,3 +14,10 @@ class KnowledgeBase:
         rule={"id":rule_id,"conditions":conditions,"conclusion":conclusion,"reason":reason,"severity":severity}
         self.rules.append(rule)
         return rule_id
+    def get_conclusion_support(self):
+        grp_conclusions={}
+        for i in self.results:
+            conclusion=self.results[i]["conclusion"]
+            grp_conclusions.setdefault(conclusion,[])
+            grp_conclusions[conclusion].append(i)
+        return grp_conclusions
