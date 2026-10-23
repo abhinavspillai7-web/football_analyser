@@ -82,5 +82,23 @@ def test_rule_order_independence():
     rule_evaluator.evaluate_rules()
     assert rule_id2 in kb.results and rule_id1 in kb.results and rule_id3 in kb.results
     print(kb.results)
+def test_rule_circular():
+    kb = knowledge_base.KnowledgeBase()
+    condition_our_team1={"source":"conclusion","subject":"our_team","type":"weakness","value":"high_press_vulnerability"}
+    conditions=[condition_our_team1]
+    rule_evaluator = evaluator.RuleEvaluator(kb)
+    conclusion1 = "press_resistance_needed"
+    reason1 = "Our team has a recorded weakness against high pressing."
+    severity1 = "high"
+    condition_our_team2={"source":"conclusion","subject":"our_team","type":"weakness","value":"press_resistance_needed"}
+    conditions2=[condition_our_team2]
+    conclusion2 = "high_press_vulnerability"
+    reason2 = "Our team has a recorded weakness against high pressing."
+    severity2 = "high"
+    rule_id2=kb.add_rule(conditions,conclusion1,reason1,severity1)
+    rule_id1=kb.add_rule(conditions2,conclusion2,reason2,severity2)
+    rule_evaluator.evaluate_rules()
+    assert kb.results=={}
 #test_conclusion_fires()
-test_rule_order_independence()
+#test_rule_order_independence()
+test_rule_circular()
