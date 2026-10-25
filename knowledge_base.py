@@ -7,11 +7,11 @@ class KnowledgeBase:
         fact_id=len(self.facts)+1
         self.facts[fact_id]=fact
         return fact_id
-    def add_rule(self,conditions,conclusion,reason,severity):
+    def add_rule(self,conditions,conclusion,reason,severity,category):
         if not conditions:
             return None
         rule_id=len(self.rules)+1
-        rule={"id":rule_id,"conditions":conditions,"conclusion":conclusion,"reason":reason,"severity":severity}
+        rule={"id":rule_id,"conditions":conditions,"conclusion":conclusion,"reason":reason,"severity":severity,"category":category}
         self.rules.append(rule)
         return rule_id
     def get_conclusion_support(self):
@@ -21,3 +21,4 @@ class KnowledgeBase:
             grp_conclusions.setdefault(conclusion,[])
             grp_conclusions[conclusion].append(i)
         return grp_conclusions
+
