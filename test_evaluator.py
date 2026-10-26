@@ -2,31 +2,43 @@ import knowledge_base
 import evaluator
 def test_rule_fires():
     kb = knowledge_base.KnowledgeBase()
-    condition_our_team={"source":"fact","subject":"our_team","type":"strength","value":"strong_at_counterattacking"}
-    condition_opp_team={"source":"fact","subject":"opponent","type":"weakness","value":"weak_at_defensive_recovery"}
+    condition_our_team={"source": "fact",
+    "subject": "our_team",
+    "type": "strength",
+    "value": "strong_at_maintaining_possession"}
+    condition_opp_team={"source": "fact",
+    "subject": "opponent",
+    "type": "weakness",
+    "value": "weak_at_defending_wide_areas"}
     conditions=[condition_our_team,condition_opp_team]
     kb.add_fact(condition_our_team)
     kb.add_fact(condition_opp_team)
     rule_evaluator = evaluator.RuleEvaluator(kb)
-    conclusion = "counterattack_opportunity"
-    reason = "so our team has a counterattacking advantage which helps beat the opp poor defensive recovery."
+    conclusion = "wide_attack_opportunity"
+    reason = "our team has an advantage over wide area"
     severity = "medium"
-    category="transitions"
+    category="attacking"
     print(kb.add_rule(conditions,conclusion,reason,severity,category))
     rule_evaluator.evaluate_rules()
     assert 1 in kb.results
     print(kb.results)
 def test_rule_does_not_fires():
     kb = knowledge_base.KnowledgeBase()
-    condition_our_team={"source":"fact","subject":"our_team","type":"weakness","value":"weak_against_high_press"}
-    condition_opp_team={"source":"fact","subject":"opponent","type":"strength","value":"strong_against_high_press"}
+    condition_our_team={"source": "fact",
+    "subject": "our_team",
+    "type": "strength",
+    "value": "strong_at_maintaining_possession"}
+    condition_opp_team={"source": "fact",
+    "subject": "opponent",
+    "type": "weakness",
+    "value": "weak_at_defending_wide_areas"}
     conditions=[condition_our_team,condition_opp_team]
     kb.add_fact(condition_our_team)
     rule_evaluator = evaluator.RuleEvaluator(kb)
-    conclusion = "high_press_vulnerability"
-    reason = "Our team has a recorded weakness against high pressing."
-    severity = "high"
-    category="defensive"
+    conclusion = "wide_attack_opportunity"
+    reason = "our team has an advantage over wide area"
+    severity = "medium"
+    category="attacking"
     print(kb.add_rule(conditions,conclusion,reason,severity,category))
     rule_evaluator.evaluate_rules()
     assert 1 not in kb.results
