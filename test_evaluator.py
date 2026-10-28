@@ -1,5 +1,6 @@
 import knowledge_base
 import evaluator
+import tactical_rules
 def test_rule_fires():
     kb = knowledge_base.KnowledgeBase()
     condition_our_team={"source": "fact",
@@ -120,8 +121,42 @@ def test_rule_circular():
     rule_id1=kb.add_rule(conditions2,conclusion2,reason2,severity2,category2)
     rule_evaluator.evaluate_rules()
     assert kb.results=={}
-test_rule_fires()
+def test_tactical_rules():
+    kb=knowledge_base.KnowledgeBase()
+    tactical_rules.register_tactical_rules(kb)
+    condition1={"source": "fact",
+    "subject": "our_team",
+    "type": "strength",
+    "value": "strong_passing"}
+    condition2={"source": "fact",
+    "subject": "our_team",
+    "type": "strength",
+    "value": "strong_ball_retention"}
+    kb.add_fact(condition1)
+    kb.add_fact(condition2)
+    rule_evaluator = evaluator.RuleEvaluator(kb)
+    rule_evaluator.evaluate_rules()
+    assert any(result["conclusion"] == "possible_possession_oriented_tendency" for result in kb.results.values())
+def test_tactical_rules_negetive():
+    kb=knowledge_base.KnowledgeBase()
+    tactical_rules.register_tactical_rules(kb)
+    condition1={"source": "fact",
+    "subject": "our_team",
+    "type": "strength",
+    "value": "strong_passing"}
+    condition2={"source": "fact",
+    "subject": "our_team",
+    "type": "strength",
+    "value": "strong_ball_retention"}
+    kb.add_fact(condition1)
+    rule_evaluator = evaluator.RuleEvaluator(kb)
+    rule_evaluator.evaluate_rules()
+    assert not any(result["conclusion"] == "possible_possession_oriented_tendency" for result in kb.results.values())
+
+'''test_rule_fires()
 test_rule_does_not_fires()
 test_conclusion_fires()
 test_rule_order_independence()
-test_rule_circular()
+test_rule_circular()'''
+test_tactical_rules()
+test_tactical_rules_negetive()
